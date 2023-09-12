@@ -31,20 +31,20 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Location> locations = <Location>[];
+  List<ToDo> todos = <ToDo>[];
 
   _HomePageState() {
     int i = 1;
     while (i <= 50) {
       // Alternate between true and false
-      locations.add(Location((i % 2 == 1), "Location${i}"));
+      todos.add(ToDo((i % 2 == 1), "Task ${i}"));
       i++;
     }
   }
 
-  void _updateLocation(bool val, int index) {
-    if (locations[index].val != val) {
-      locations[index].val = val;
+  void _updateTask(bool val, int index) {
+    if (todos[index].val != val) {
+      todos[index].val = val;
     }
     setState(() {});
   }
@@ -53,16 +53,16 @@ class _HomePageState extends State<HomePage> {
     List<Widget> items = <Widget>[];
 
     items.add(w);
-    locations.asMap().forEach((index, location) {
-      if (flag == location.val) {
+    todos.asMap().forEach((index, todo) {
+      if (flag == todo.val) {
         items.add(
           Align(
             alignment: flag ? Alignment.topLeft : Alignment.topRight,
             child: GestureDetector(
               onTap: (() {
-                _updateLocation(!locations[index].val, index);
+                _updateTask(!todos[index].val, index);
               }),
-              child: Text('${locations[index].name}'),
+              child: Text('${todos[index].name}'),
             ),
           ),
         );
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               child: buildCard(Text('Save')),
             ),
             Text(
-                'Scroll a list until you find the location you are looking for.'),
+                'Scroll a list until you find the todo item you are looking for.'),
             Text('Tap on the name and it will move to the other list.'),
             Text('Once you\'ve made all your changes, click Save'),
             // Making this work correctly https://www.youtube.com/watch?v=9kZ0RiYYR2E
@@ -104,14 +104,13 @@ class _HomePageState extends State<HomePage> {
                       buildBox(
                         Align(
                             alignment: Alignment.topRight,
-                            child: Text('Available')),
+                            child: Text('To Do')),
                       ),
                       false),
                   buildListview(
                       buildBox(
                         Align(
-                            alignment: Alignment.topLeft,
-                            child: Text('Subscribed')),
+                            alignment: Alignment.topLeft, child: Text('Done')),
                       ),
                       true),
                 ],
@@ -124,11 +123,11 @@ class _HomePageState extends State<HomePage> {
   }
 }
 
-class Location extends ChangeNotifier {
+class ToDo extends ChangeNotifier {
   bool val = false;
   String name = "";
 
-  Location(this.val, this.name) {}
+  ToDo(this.val, this.name) {}
 }
 
 buildCard(Widget w) {
